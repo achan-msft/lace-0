@@ -3,7 +3,6 @@ import random
 import time
 
 CHAT_TITLE = "Chat demo"
-# Streamed response emulator
 def response_generator():
     response = random.choice(
         [
@@ -19,9 +18,8 @@ def response_generator():
 
 st.title(CHAT_TITLE)
 #--------------------------------------------------------------------------
-#   Session 
+#   Session - Initialize chat history 
 #--------------------------------------------------------------------------
-# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 

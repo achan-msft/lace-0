@@ -13,19 +13,6 @@ class LoanApplication:
         self.client = CosmosClient(COSMOS_ENDPOINT, COSMOS_KEY)
         self.database = self.client.get_database_client(COSMOS_DATABASE)
         self.container = self.database.get_container_client(COSMOS_CONTAINER)
-
-    def test(self):
-        asdfaf="dsafsa"
-        item = {"id": 1, "name": "test"}
-        
-        try:
-            # self.container.create_item(body=item)
-            container_properties = self.container.read() 
-
-            asdf = "dsaf "
-
-        except Exception as e:
-            print(e)
     
     def get_latest_loan_application_id(self):
         loan_application_id = 0
@@ -51,6 +38,7 @@ class LoanApplication:
         except Exception as e:
             print(e)
 
+    # TODO item
     def delete(self):
         query = "SELECT * FROM c"
         try: 

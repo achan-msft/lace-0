@@ -117,7 +117,6 @@ class Converse():
                 container_name=container_name
             )
 
-            # insert to cosmos 
             data = {
                 "container_name": container_name,
                 "sas_url": sas_url
@@ -125,14 +124,8 @@ class Converse():
             la = LoanApplication()
             record = la.insert_loan_application(data)
 
-            content = f"Your application id is {record["id"]}.  Please upload your documents at this url:{sas_url}"
-            
-            # uploaded_file = st.file_uploader("Upload your document", type="pdf")
-            # if uploaded_file is not None:
-
-            #     safdsf = "dsfasd"
-                # uploaded_file.save(f"{container_name}/{uploaded_file.name}")
-
+            # content = f"Your application id is {record["id"]}.  Please upload your documents at this url:{sas_url}"
+            content = f"Your application id is {record["id"]}.  Please upload your documents"
             
             messages.append({
                 "tool_call_id": tool_call.id,

@@ -3,7 +3,7 @@ import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 from converse import Converse 
-from function import AzureStorage 
+from function.azure_storage import AzureStorage  
 
 load_dotenv()
 st.title("LACE")
@@ -14,14 +14,11 @@ AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 AZURE_OPENAI_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 
-# client = OpenAI(api_key=AZURE_OPENAI_API_KEY)
 client = AzureOpenAI(
     azure_endpoint = AZURE_OPENAI_ENDPOINT, 
     api_key = AZURE_OPENAI_API_KEY,  
     api_version = AZURE_OPENAI_API_VERSION
 )
-# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
 
 # Set a default model
 if "openai_model" not in st.session_state:
@@ -44,16 +41,6 @@ for message in st.session_state.messages:
             st.markdown(message["content"])
 
 #----------------------------------------------------------------------------------------------------------------------------------
-#   file upload 
-#----------------------------------------------------------------------------------------------------------------------------------
-# if "show_uploader" in st.session_state and st.session_state['show_uploader']:      
-#     # If the file was uploaded, you can prompt the user for further actions         
-#     st.write("You have successfully uploaded a file. How can I assist you next?")   
-#     st.session_state['show_uploader'] = False 
-
-#     st.chat_input("What is up?")
-
-#----------------------------------------------------------------------------------------------------------------------------------
 #   Accept user input
 #----------------------------------------------------------------------------------------------------------------------------------
 if prompt := st.chat_input():    
@@ -72,25 +59,26 @@ if prompt := st.chat_input():
 
     st.session_state.messages.append({"role": "assistant", "content": message})
 
-#   file upload
+#----------------------------------------------------------------------------------------------------------------------------------
+#   File upload
+#----------------------------------------------------------------------------------------------------------------------------------
 if st.session_state['show_uploader']:
-
-    uploaded_file = st.file_uploader("Upload a file", type=["txt", "csv"])
-    if uploaded_file:
+    uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
+    if uploaded_files is not None:
         container_name = st.session_state["container_name"]
-        # bytes_data = uploaded_file.getvalue() 
-        # st.write(bytes_data)
+        storage = AzureStorage() 
 
-        storage = AzureStorage()            
-        _, sas_url = storage.upload_file_to_azure_container(container_name)
+        st.session_state['all_uploaded'] = False
+        files_count = 0 
+        for file in uploaded_files:
+            bytes_data = file.getvalue()
+            container = "06dece9a-199f-40a3-a3bc-b2b0fb11fa3f"
+            storage.upload(container=container_name, file_name=file.name, bytes=bytes_data)
 
+            st.session_state['show_uploader'] = False 
+            st.session_state['all_uploaded'] = True
+            files_count += 1
 
-
-        st.success("file succwessfully uploaded")
-        st.session_state['show_uploader'] = False 
-
-
-# uploaded_file = st.file_uploader("Upload your file")
-# if uploaded_file is not None:
-    # Perform file validation and processing here
-    # st.success("File successfully uploaded!")
+        if st.session_state['all_uploaded']:
+            st.success(f"{files_count} file(s) successfully uploaded")
+            st.session_state['show_uploader'] = False
