@@ -112,14 +112,13 @@ class Converse():
         elif tool_call.function.name == "apply_loan":
             function_args = json.loads(tool_call.function.arguments)
             storage = AzureStorage()            
-            container_name = str(uuid.uuid4()) # function_args.get("container_name")
-            successful_created, sas_url = storage.create_azure_container_and_sas_url(
-                container_name=container_name
-            )
+            folder_name = str(uuid.uuid4()) # function_args.get("container_name")
+            # successful_created, sas_url = storage.create_azure_container_and_sas_url(
+            #     container_name=container_name
+            # )
 
             data = {
-                "container_name": container_name,
-                "sas_url": sas_url
+                "folder_name": folder_name
             }
             la = LoanApplication()
             record = la.insert_loan_application(data)
@@ -133,9 +132,10 @@ class Converse():
                 "name": tool_call.function.name,
                 "content": content
             })
-            st.session_state["container_name"] = container_name 
+            st.session_state["folder_name"] = folder_name 
 
         elif tool_call.function.name == "get_loan_status":
+            # working in progress
             if tool_call.function.arguments is None or "loan" not in tool_call.function.arguments:
                 return  
             
