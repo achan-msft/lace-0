@@ -1,0 +1,91 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city name, e.g. San Francisco"
+                    }
+                    ,
+                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+                },
+                "required": ["location"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_time",
+            "description": "Get the current time in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city name, e.g. San Francisco"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    }
+    ,
+    {
+        "type": "function",
+        "function": {
+            "name": "create_azure_container",
+            "description": "create an azure storage container",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "container_name": {
+                        "type": "string",
+                        "description": "container name"
+                    }
+                },
+                "required": ["container_name"]
+            }
+        }
+    }
+    ,
+    {
+        "type": "function",
+        "function": {
+            "name": "apply_loan",
+            "description": "apply for the loan",
+            "parameters1": {
+                "type": "object",
+                "properties": {
+                    "container_name": {
+                        "type": "string",
+                        "description": "container name"
+                    }
+                }
+            }
+        }
+    }
+    ,
+    {
+        "type": "function",
+        "function": {
+            "name": "get_loan_status",
+            "description": "get the loan status",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "loan_id": {
+                        "type": "string",
+                        "description": "loan id which is a numerical value"
+                    }
+                },
+                "required": ["loan_id"]
+            }
+        }
+    }
+]
