@@ -13,6 +13,7 @@ AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 AZURE_OPENAI_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+AZURE_STORAGE_CONTAINER_NAME = os.getenv("AZURE_STORAGE_CONTAINER_NAME")
 
 client = AzureOpenAI(
     azure_endpoint = AZURE_OPENAI_ENDPOINT, 
@@ -65,15 +66,17 @@ if prompt := st.chat_input():
 if st.session_state['show_uploader']:
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
     if uploaded_files is not None:
-        container_name = st.session_state["container_name"]
+        # container_name = st.session_state["container_name"]
+        folder_name = st.session_state["folder_name"]
         storage = AzureStorage() 
 
         st.session_state['all_uploaded'] = False
         files_count = 0 
         for file in uploaded_files:
             bytes_data = file.getvalue()
-            container = "06dece9a-199f-40a3-a3bc-b2b0fb11fa3f"
-            storage.upload(container=container_name, file_name=file.name, bytes=bytes_data)
+            # container = "06dece9a-199f-40a3-a3bc-b2b0fb11fa3f"
+            file_name = f"{folder_name}/{file.name}"
+            storage.upload(container=AZURE_STORAGE_CONTAINER_NAME, file_name=file_name, bytes=bytes_data)
 
             st.session_state['show_uploader'] = False 
             st.session_state['all_uploaded'] = True

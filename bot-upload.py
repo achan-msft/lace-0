@@ -10,8 +10,9 @@ if uploaded_files is not None:
     for file in uploaded_files:
         bytes_data = file.getvalue()
         storage = AzureStorage() 
-        container = "06dece9a-199f-40a3-a3bc-b2b0fb11fa3f"
-        storage.upload(container=container, file_name=file.name, bytes=bytes_data)
+        container = "0829d557-432c-4aad-9389-362cc3310738"
+        file_name = f"abc/{file.name}"
+        storage.upload(container=container, file_name=file_name, bytes=bytes_data)
     
     # bytes_data = uploaded_file.getvalue()
     # storage = AzureStorage() 
