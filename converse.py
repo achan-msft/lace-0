@@ -111,11 +111,13 @@ class Converse():
 
         elif tool_call.function.name == "apply_loan":
             function_args = json.loads(tool_call.function.arguments)
-            storage = AzureStorage()            
-            folder_name = str(uuid.uuid4()) # function_args.get("container_name")
-            # successful_created, sas_url = storage.create_azure_container_and_sas_url(
-            #     container_name=container_name
-            # )
+            storage = AzureStorage()       
+
+            if "folder_name" in st.session_state and st.session_state["folder_name"] != "":     
+                folder_name = st.session_state["folder_name"]
+            else:
+                folder_name = str(uuid.uuid4()) # function_args.get("container_name")
+                st.session_state["folder_name"] = folder_name 
 
             data = {
                 "folder_name": folder_name
@@ -123,7 +125,6 @@ class Converse():
             la = LoanApplication()
             record = la.insert_loan_application(data)
 
-            # content = f"Your application id is {record["id"]}.  Please upload your documents at this url:{sas_url}"
             content = f"Your application id is {record["id"]}.  Please upload your documents"
             
             messages.append({
@@ -132,7 +133,6 @@ class Converse():
                 "name": tool_call.function.name,
                 "content": content
             })
-            st.session_state["folder_name"] = folder_name 
 
         elif tool_call.function.name == "get_loan_status":
             # working in progress
