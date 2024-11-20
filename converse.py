@@ -145,15 +145,21 @@ class Converse():
 
         elif tool_call.function.name == "get_loan_status":
             # working in progress
-            if tool_call.function.arguments is None or "loan" not in tool_call.function.arguments:
-                return  
+            # if tool_call.function.arguments is None or "loan" not in tool_call.function.arguments:
+            #     return  
             
+            folder_name = st.session_state["folder_name"]  # function_args.get("loan_id")
             function_args = json.loads(tool_call.function.arguments)
+
             la = LoanApplication()
-            record = la.get_loan_application(loan_application_id=function_args.get("loan_id"))
+            record = la.get_loan_application(loan_application_id=folder_name)
 
             # content = f"The status id is {record["id"]}."
-            content = f"The loan status is {record['status']}." 
+            approved = record['Rating']
+
+            approved_content = f"Congratulations! Your loan application has been approved."
+            rejected_content = f"Sorry! Your loan application has been rejected."
+            content = approved_content if approved else rejected_content
 
             messages.append({
                 "tool_call_id": tool_call.id,

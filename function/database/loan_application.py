@@ -1,20 +1,27 @@
 import os 
 from azure.cosmos import CosmosClient
+from azure.identity import DefaultAzureCredential
 
 class LoanApplication:
     def __init__(self):            
-        # Set up Cosmos DB        
-        COSMOS_ENDPOINT = os.getenv('COSMOS_ENDPOINT')
-        COSMOS_KEY = os.getenv('COSMOS_KEY')
-        COSMOS_DATABASE = os.getenv('COSMOS_DATABASE') 
-        COSMOS_LOAN_APPLICATION_CONTAINER = os.getenv("COSMOS_LOAN_APPLICATION_CONTAINER")
-        COSMOS_LOAN_CONTAINER = os.getenv("COSMOS_LOAN_CONTAINER")
+        try:
+            # Set up Cosmos DB        
+            COSMOS_ENDPOINT = os.getenv('COSMOS_ENDPOINT')
+            COSMOS_KEY = os.getenv('COSMOS_KEY')
+            COSMOS_DATABASE = os.getenv('COSMOS_DATABASE') 
+            COSMOS_LOAN_APPLICATION_CONTAINER = os.getenv("COSMOS_LOAN_APPLICATION_CONTAINER")
+            COSMOS_LOAN_CONTAINER = os.getenv("COSMOS_LOAN_CONTAINER")
 
-        self.client = CosmosClient(COSMOS_ENDPOINT, COSMOS_KEY)
-        self.database = self.client.get_database_client(COSMOS_DATABASE)
-        self.loan_application_container = self.database.get_container_client(COSMOS_LOAN_APPLICATION_CONTAINER)
-        self.loan_container = self.database.get_container_client(COSMOS_LOAN_CONTAINER)
-    
+            # credential = DefaultAzureCredential()
+            # self.client = CosmosClient(COSMOS_ENDPOINT, credential)
+            self.client = CosmosClient(COSMOS_ENDPOINT, COSMOS_KEY)
+            self.database = self.client.get_database_client(COSMOS_DATABASE)
+            self.loan_application_container = self.database.get_container_client(COSMOS_LOAN_APPLICATION_CONTAINER)
+            self.loan_container = self.database.get_container_client(COSMOS_LOAN_CONTAINER)
+
+        except Exception as e:
+            print(e)
+
     def get_latest_loan_application_id(self):
         loan_application_id = 0
         query = "SELECT VALUE MAX(StringToNumber(c.id)) FROM c"

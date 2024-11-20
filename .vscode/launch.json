@@ -27,6 +27,12 @@
                 "--server.port",
                 "8503"       
             ]
+        },
+        {
+            "name": "test",
+            "type": "debugpy",
+            "request": "launch",
+            "args": []
         }
     ]
 }

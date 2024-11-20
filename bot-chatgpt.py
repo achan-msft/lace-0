@@ -22,7 +22,7 @@ client = AzureOpenAI(
 )
 
 def show_loan_doc_uploader():
-    show = True if st.session_state["action"] == "apply_loan" else False 
+    show = True if "action" in st.session_state  and st.session_state["action"] == "apply_loan" else False 
     st.session_state["action"] = ""
     return show 
 
