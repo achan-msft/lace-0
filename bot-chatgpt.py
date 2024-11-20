@@ -21,6 +21,11 @@ client = AzureOpenAI(
     api_version = AZURE_OPENAI_API_VERSION
 )
 
+def show_loan_doc_uploader():
+    show = True if st.session_state["action"] == "apply_loan" else False 
+    st.session_state["action"] = ""
+    return show 
+
 # Set a default model
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
@@ -55,7 +60,7 @@ if prompt := st.chat_input():
         message = converse.start(message_list=st.session_state.messages, is_stream=True, streamlit=st)
         st.markdown(message)
 
-        if 'name' in st.session_state.messages[-1] and st.session_state.messages[-1]['name'] == 'apply_loan':
+        if show_loan_doc_uploader():
             st.session_state['show_uploader'] = True 
 
     st.session_state.messages.append({"role": "assistant", "content": message})

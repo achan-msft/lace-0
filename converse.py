@@ -110,6 +110,8 @@ class Converse():
             })
 
         elif tool_call.function.name == "apply_loan":
+            st.session_state["action"] = "apply_loan"
+
             function_args = json.loads(tool_call.function.arguments)
             storage = AzureStorage()       
 
@@ -122,10 +124,17 @@ class Converse():
             data = {
                 "folder_name": folder_name
             }
-            la = LoanApplication()
-            record = la.insert_loan_application(data)
+            
+            if "id" in st.session_state and st.session_state["id"] != "":  
+                id = st.session_state["id"]
+                content = f"Your application has already been initiated and id is {id}.  Please upload your documents."
 
-            content = f"Your application id is {record["id"]}.  Please upload your documents"
+            else:
+                la = LoanApplication()
+                record = la.insert_loan_application(data)
+                st.session_state["id"] = record["id"]
+                content = f"Your application id is {record["id"]}.  Please upload your documents."
+
             
             messages.append({
                 "tool_call_id": tool_call.id,

@@ -58,7 +58,7 @@
         "type": "function",
         "function": {
             "name": "apply_loan",
-            "description": "apply for the loan",
+            "description": "apply for the loan. no need to reply with sample required documents. if it's not the first time, recommend the user to upload documents if they have not done so.",
             "parameters1": {
                 "type": "object",
                 "properties": {

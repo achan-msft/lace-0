@@ -11,9 +11,11 @@ class AzureStorage:
     def __init__(self):
         try:
             load_dotenv()
-            self.STORAGE_ACCOUNT_NAME = os.getenv("STORAGE_ACCOUNT_NAME") # "llmstorage1"
+            self.STORAGE_ACCOUNT_NAME = os.getenv("STORAGE_ACCOUNT_NAME")
             self.account_url = f"https://{self.STORAGE_ACCOUNT_NAME}.blob.core.windows.net"
-            self.credential = DefaultAzureCredential()
+
+            azure_storage_credential = os.getenv("AZURE_STORAGE_CREDENTIAL")            
+            self.credential = DefaultAzureCredential() if azure_storage_credential == "" else azure_storage_credential
 
         except Exception as e:
             print(f"exception within constructor:{e}")
@@ -59,5 +61,8 @@ class AzureStorage:
             blob_client = blob_service_client.get_blob_client(container=container, blob=file_name)
             blob_client.upload_blob(bytes)
 
+        except ResourceExistsError as e:
+            return 
+        
         except Exception as e:
             print(e)
