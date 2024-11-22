@@ -2,6 +2,11 @@ import os
 from azure.cosmos import CosmosClient
 from azure.identity import DefaultAzureCredential
 
+# for LocalAuthentication issue, execute the follwoing 
+# az resource update --resource-group "harrchen-rg" --name "harrchencosmos1" 
+# --resource-type "Microsoft.DocumentDB/databaseAccounts" 
+# --set properties.disableLocalAuth=false
+
 class LoanApplication:
     def __init__(self):            
         try:
