@@ -5,7 +5,8 @@ import json
 TIMEZONE_DATA = {
     "tokyo": "Asia/Tokyo",
     "san francisco": "America/Los_Angeles",
-    "paris": "Europe/Paris"
+    "paris": "Europe/Paris",
+    "seattle": "America/Los_Angeles"
 }
 class DateTimeUtility:
 
